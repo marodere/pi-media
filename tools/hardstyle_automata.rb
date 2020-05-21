@@ -57,8 +57,7 @@ voices.each do |v|
   play_sample_pack v[0], v[1]
 end
 
-loop do
+live_loop :main do
   use_bpm (akai_cc_handle 8) + 120
-  cue :main
   sleep 16
 end
