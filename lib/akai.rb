@@ -20,6 +20,7 @@ __akai_note_pads = (36..43)
 #
 
 __registered_events = Hash.new()
+__akai_channel = __akai_channels.first()
 
 define :__process_event do |channel_no, event_type, key, value=nil|
   if !__registered_events.has_key? channel_no then
@@ -99,8 +100,6 @@ __akai_channels.each do |channel_no|
   end
 end
 
-set :__akai_channel, __akai_channels.first()
-
 puts __akai_log_prefix + "started!"
 
 #
@@ -116,7 +115,7 @@ define :__akai_channel do |channel_no|
     __akai_validate_channel channel_no
     return channel_no.to_s
   end
-  return get[:__akai_channel].to_s
+  return __akai_channel.to_s
 end
 
 #
@@ -127,14 +126,14 @@ end
 
 define :use_akai_channel do |channel_no|
   __akai_validate_channel channel_no
-  set :__akai_channel, channel_no
+  __akai_channel = channel_no
 end
 
 define :with_akai_channel do |channel_no, &block|
-  outer_channel = get[:__akai_channel]
+  outer_channel = __akai_channel
   use_akai_channel channel_no
   block.call
-  set :__akai_channel, outer_channel
+  __akai_channel = outer_channel
 end
 
 # program
